@@ -106,7 +106,6 @@ namespace Cybersecurity
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userPassword);
 
                 // Insert user into the database with hashed password
-                int id = 1;
                 string insertQuery = "INSERT INTO users (username, password) VALUES (@username, @password)";
                 MySqlCommand insertCommand = new MySqlCommand(insertQuery, connection);
                 insertCommand.Parameters.AddWithValue("@username", username);

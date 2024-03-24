@@ -38,6 +38,8 @@
             this.ipinput = new System.Windows.Forms.TextBox();
             this.podipinput = new System.Windows.Forms.Label();
             this.pingresult = new System.Windows.Forms.Label();
+            this.latestupdatelabel = new System.Windows.Forms.Label();
+            this.latestupdate = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // projectName
@@ -159,12 +161,35 @@
             this.pingresult.Text = "label1";
             this.pingresult.Visible = false;
             // 
+            // latestupdatelabel
+            // 
+            this.latestupdatelabel.AutoSize = true;
+            this.latestupdatelabel.Font = new System.Drawing.Font("Rockwell", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.latestupdatelabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(129)))), ((int)(((byte)(16)))));
+            this.latestupdatelabel.Location = new System.Drawing.Point(74, 211);
+            this.latestupdatelabel.Name = "latestupdatelabel";
+            this.latestupdatelabel.Size = new System.Drawing.Size(160, 26);
+            this.latestupdatelabel.TabIndex = 14;
+            this.latestupdatelabel.Text = "Latest update:";
+            // 
+            // latestupdate
+            // 
+            this.latestupdate.Font = new System.Drawing.Font("Rockwell", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.latestupdate.ForeColor = System.Drawing.Color.White;
+            this.latestupdate.Location = new System.Drawing.Point(67, 250);
+            this.latestupdate.Name = "latestupdate";
+            this.latestupdate.Size = new System.Drawing.Size(234, 116);
+            this.latestupdate.TabIndex = 15;
+            this.latestupdate.Text = "label1";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(24)))), ((int)(((byte)(33)))));
             this.ClientSize = new System.Drawing.Size(978, 481);
+            this.Controls.Add(this.latestupdate);
+            this.Controls.Add(this.latestupdatelabel);
             this.Controls.Add(this.pingresult);
             this.Controls.Add(this.podipinput);
             this.Controls.Add(this.ipinput);
@@ -195,5 +220,7 @@
         private System.Windows.Forms.TextBox ipinput;
         private System.Windows.Forms.Label podipinput;
         private System.Windows.Forms.Label pingresult;
+        private System.Windows.Forms.Label latestupdatelabel;
+        private System.Windows.Forms.Label latestupdate;
     }
 }

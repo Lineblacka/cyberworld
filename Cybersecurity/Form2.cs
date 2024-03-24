@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using RestSharp;
+using Newtonsoft.Json.Linq;
 
 namespace Cybersecurity
 {
     public partial class Form2 : Form
     {
+        // Your GitHub repository URL
+        private const string RepositoryUrl = "https://api.github.com/repos/Lineblacka/cyberworld";
+
+        // Initialize typing timer and resultToShow variables
         private Timer typingTimer;
         private string resultToShow;
         private int currentIndex;
@@ -23,6 +29,31 @@ namespace Cybersecurity
 
             // Attach KeyDown event handler to ipinput textbox
             ipinput.KeyDown += ipinput_KeyDown;
+
+            // Fetch last commit message from GitHub repository and display it
+            FetchLastCommitMessage();
+        }
+
+        // Fetch last commit message from GitHub repository
+        private void FetchLastCommitMessage()
+        {
+            var client = new RestClient(RepositoryUrl);
+            var request = new RestRequest("/commits", RestSharp.Method.Get); // Use RestSharp.Method.GET directly
+            request.AddParameter("per_page", 1); // Fetch only the last commit
+            request.AddHeader("User-Agent", "RestSharp"); // GitHub requires User-Agent header
+            var response = client.Execute(request);
+
+            if (response.IsSuccessful)
+            {
+                var jsonResponse = JArray.Parse(response.Content);
+                var lastCommitMessage = jsonResponse[0]["commit"]["message"].ToString();
+                latestupdate.Text = "- " + lastCommitMessage;
+            }
+            else
+            {
+                // Handle unsuccessful response
+                MessageBox.Show("Failed to fetch last commit message from GitHub.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void TypingTimer_Tick(object sender, EventArgs e)
