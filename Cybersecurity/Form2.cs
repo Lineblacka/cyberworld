@@ -3,18 +3,19 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using RestSharp;
 using Newtonsoft.Json.Linq;
+using System.Net.Sockets;
+using System.Net;
+using System.Threading;
 
 namespace Cybersecurity
 {
     public partial class Form2 : Form
     {
-        // Your GitHub repository URL
         private const string RepositoryUrl = "https://api.github.com/repos/Lineblacka/cyberworld";
 
-        // Initialize typing timer and resultToShow variables
-        private Timer typingTimer;
         private string resultToShow;
         private int currentIndex;
+
 
         public Form2()
         {
@@ -22,79 +23,120 @@ namespace Cybersecurity
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
 
-            // Initialize typing timer
-            typingTimer = new Timer();
-            typingTimer.Interval = 30; // Adjust typing speed here (milliseconds)
-            typingTimer.Tick += TypingTimer_Tick;
-
-            // Attach KeyDown event handler to ipinput textbox
             ipinput.KeyDown += ipinput_KeyDown;
 
-            // Fetch last commit message from GitHub repository and display it
-            FetchLastCommitMessage();
+            FetchAllCommitMessagesWithDates();
         }
 
-        // Fetch last commit message from GitHub repository
-        private void FetchLastCommitMessage()
+        private void StartListening()
+        {
+            int listenPort = 80; // Example port
+            IPAddress localAddr = IPAddress.Parse("127.0.0.1"); // Listen on localhost, adjust as necessary
+
+            try
+            {
+                TcpListener listener = new TcpListener(localAddr, listenPort);
+                listener.Start();
+
+                while (true)
+                {
+                    TcpClient client = listener.AcceptTcpClient();
+                    NetworkStream stream = client.GetStream();
+
+                    IPEndPoint remoteEndPoint = client.Client.RemoteEndPoint as IPEndPoint;
+                    string remoteIP = remoteEndPoint.Address.ToString();
+                    int remotePort = remoteEndPoint.Port;
+                    string protocol = "TCP"; // Since we're using TcpListener
+
+                    UpdateUI($"{remoteIP} {remotePort} {protocol}");
+
+                    client.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void sniffstart_Click(object sender, EventArgs e)
+        {
+            Thread listenerThread = new Thread(StartListening);
+            listenerThread.IsBackground = true; // Mark the thread as a background thread
+            listenerThread.Start();
+        }
+
+
+        private void UpdateUI(string message)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<string>(UpdateUI), new object[] { message });
+                return;
+            }
+            sniffed.Text = message; // `sniffed` is your label for displaying IP, port, and protocol
+        }
+
+
+        private void FetchAllCommitMessagesWithDates()
         {
             var client = new RestClient(RepositoryUrl);
             var request = new RestRequest("/commits", RestSharp.Method.Get); // Use RestSharp.Method.GET directly
-            request.AddParameter("per_page", 1); // Fetch only the last commit
+            request.AddParameter("per_page", 100); // Fetch a reasonable number of commits per page
             request.AddHeader("User-Agent", "RestSharp"); // GitHub requires User-Agent header
             var response = client.Execute(request);
 
             if (response.IsSuccessful)
             {
                 var jsonResponse = JArray.Parse(response.Content);
-                var lastCommitMessage = jsonResponse[0]["commit"]["message"].ToString();
-                latestupdate.Text = "- " + lastCommitMessage;
+                string commitMessages = "";
+                
+                for (int i = 0; i < jsonResponse.Count; i++)
+                {
+                    var commit = jsonResponse[i];
+                    var commitMessage = commit["commit"]["message"].ToString();
+                    var commitDate = DateTime.Parse(commit["commit"]["author"]["date"].ToString());
+
+                    var formattedDate = commitDate.ToString("yyyy-MM-dd");
+
+                    commitMessages += $"{i + 1}. [{formattedDate}] - {commitMessage}{Environment.NewLine}";
+                }
+
+                latestupdate.Text = commitMessages;
             }
             else
             {
-                // Handle unsuccessful response
-                MessageBox.Show("Failed to fetch last commit message from GitHub.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to fetch commit messages from GitHub.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+
         private void TypingTimer_Tick(object sender, EventArgs e)
         {
-            // Check if there are characters left to display
             if (currentIndex < resultToShow.Length)
             {
-                // Display the next character
                 pingresult.Text += resultToShow[currentIndex];
                 currentIndex++;
             }
             else
             {
-                // Stop the timer when all characters are displayed
-                typingTimer.Stop();
             }
         }
 
         private void ipinput_KeyDown(object sender, KeyEventArgs e)
         {
-            // Check if the pressed key is Enter
             if (e.KeyCode == Keys.Enter)
             {
-                // Get the IP address from the textbox
                 string ipAddress = ipinput.Text.Trim();
 
-                // Validate the IP address (you might want to add more validation)
                 if (!string.IsNullOrEmpty(ipAddress))
                 {
-                    // Start the ping process
                     resultToShow = RunPing(ipAddress);
 
-                    // Display the typing animation
-                    pingresult.Visible = true;
-                    currentIndex = 0;
-                    pingresult.Text = "";
-                    typingTimer.Start();
+                    
                 }
                 else
                 {
-                    // Inform the user to enter a valid IP address
                     MessageBox.Show("Please enter a valid IP address.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
@@ -102,23 +144,51 @@ namespace Cybersecurity
 
         private string RunPing(string ipAddress)
         {
-            // Create process info
             MessageBox.Show("Started pinging...", "Notification");
             ProcessStartInfo psi = new ProcessStartInfo("ping", $"-n 4 {ipAddress}");
             psi.RedirectStandardOutput = true;
             psi.UseShellExecute = false;
             psi.CreateNoWindow = true;
 
-            // Start the process
             Process process = Process.Start(psi);
 
-            // Read the output
             string output = process.StandardOutput.ReadToEnd();
+            pingresult.Visible = true;
+            currentIndex = 0;
+            pingresult.Text = output;
 
-            // Wait for process to exit
             process.WaitForExit();
 
             return output;
         }
+
+        private void sniffer_Click(object sender, EventArgs e)
+        {
+            //false
+            pinglabel.Visible = false;
+            ipinput.Visible = false;
+            podipinput.Visible = false;
+            pingresult.Visible = false;
+            latestupdate.Visible = false;
+            latestupdatelabel.Visible = false;
+
+            //true
+            snifferlabel.Visible = true;
+            sniffstart.Visible = true;
+        }
+
+        private Form3 form3; // Assume form3 is initialized somewhere in your code
+
+        private void exploits_Click(object sender, EventArgs e)
+        {
+            this.Hide(); // Hides the current form, which is Form2 in this context
+            if (form3 == null || form3.IsDisposed) // Check if form3 is not already open
+            {
+                form3 = new Form3(); // Creates a new instance of Form3 if it doesn't exist or was disposed
+                form3.FormClosed += (s, args) => this.Show(); // Optional: Shows Form2 again when Form3 is closed
+            }
+            form3.Show(); // Shows Form3
+        }
+
     }
 }

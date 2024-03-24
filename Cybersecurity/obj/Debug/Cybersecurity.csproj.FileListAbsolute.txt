@@ -60,3 +60,12 @@ C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\bin\Debug\System.Value
 C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\obj\Debug\Cybersec.83AFFE14.Up2Date
 C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\obj\Debug\Cybersecurity.exe
 C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\obj\Debug\Cybersecurity.pdb
+C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\bin\Debug\PacketDotNet.dll
+C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\bin\Debug\SharpPcap.dll
+C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\bin\Debug\System.Text.Encoding.CodePages.dll
+C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\bin\Debug\System.Text.Encoding.CodePages.xml
+C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\obj\Debug\Cybersecurity.exe.manifest
+C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\bin\Debug\Cybersecurity.exe.manifest
+C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\bin\Debug\Cybersecurity.application
+C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\obj\Debug\Cybersecurity.application
+C:\Users\Teacher\source\repos\Cybersecurity\Cybersecurity\obj\Debug\Cybersecurity.Form3.resources

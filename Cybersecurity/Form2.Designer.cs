@@ -40,6 +40,9 @@
             this.pingresult = new System.Windows.Forms.Label();
             this.latestupdatelabel = new System.Windows.Forms.Label();
             this.latestupdate = new System.Windows.Forms.Label();
+            this.snifferlabel = new System.Windows.Forms.Label();
+            this.sniffstart = new System.Windows.Forms.Button();
+            this.sniffed = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // projectName
@@ -65,6 +68,7 @@
             this.sniffer.TabIndex = 5;
             this.sniffer.Text = "Sniffer";
             this.sniffer.UseVisualStyleBackColor = true;
+            this.sniffer.Click += new System.EventHandler(this.sniffer_Click);
             // 
             // exploits
             // 
@@ -78,6 +82,7 @@
             this.exploits.TabIndex = 6;
             this.exploits.Text = "Exploits";
             this.exploits.UseVisualStyleBackColor = true;
+            this.exploits.Click += new System.EventHandler(this.exploits_Click);
             // 
             // request
             // 
@@ -176,11 +181,48 @@
             // 
             this.latestupdate.Font = new System.Drawing.Font("Rockwell", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.latestupdate.ForeColor = System.Drawing.Color.White;
-            this.latestupdate.Location = new System.Drawing.Point(67, 250);
+            this.latestupdate.Location = new System.Drawing.Point(37, 250);
             this.latestupdate.Name = "latestupdate";
-            this.latestupdate.Size = new System.Drawing.Size(234, 116);
+            this.latestupdate.Size = new System.Drawing.Size(346, 206);
             this.latestupdate.TabIndex = 15;
             this.latestupdate.Text = "label1";
+            // 
+            // snifferlabel
+            // 
+            this.snifferlabel.BackColor = System.Drawing.Color.Transparent;
+            this.snifferlabel.Font = new System.Drawing.Font("Rockwell", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.snifferlabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(129)))), ((int)(((byte)(16)))));
+            this.snifferlabel.Location = new System.Drawing.Point(413, 78);
+            this.snifferlabel.Name = "snifferlabel";
+            this.snifferlabel.Size = new System.Drawing.Size(115, 34);
+            this.snifferlabel.TabIndex = 16;
+            this.snifferlabel.Text = "Sniffer";
+            this.snifferlabel.Visible = false;
+            // 
+            // sniffstart
+            // 
+            this.sniffstart.FlatAppearance.BorderSize = 0;
+            this.sniffstart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.sniffstart.Font = new System.Drawing.Font("Rockwell", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sniffstart.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(129)))), ((int)(((byte)(16)))));
+            this.sniffstart.Location = new System.Drawing.Point(844, 407);
+            this.sniffstart.Name = "sniffstart";
+            this.sniffstart.Size = new System.Drawing.Size(91, 37);
+            this.sniffstart.TabIndex = 17;
+            this.sniffstart.Text = "Start";
+            this.sniffstart.UseVisualStyleBackColor = true;
+            this.sniffstart.Visible = false;
+            // 
+            // sniffed
+            // 
+            this.sniffed.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sniffed.ForeColor = System.Drawing.Color.White;
+            this.sniffed.Location = new System.Drawing.Point(65, 119);
+            this.sniffed.Name = "sniffed";
+            this.sniffed.Size = new System.Drawing.Size(848, 337);
+            this.sniffed.TabIndex = 18;
+            this.sniffed.Text = "IP PORT PROTOCOL";
+            this.sniffed.Visible = false;
             // 
             // Form2
             // 
@@ -188,6 +230,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(24)))), ((int)(((byte)(33)))));
             this.ClientSize = new System.Drawing.Size(978, 481);
+            this.Controls.Add(this.sniffed);
+            this.Controls.Add(this.sniffstart);
+            this.Controls.Add(this.snifferlabel);
             this.Controls.Add(this.latestupdate);
             this.Controls.Add(this.latestupdatelabel);
             this.Controls.Add(this.pingresult);
@@ -222,5 +267,8 @@
         private System.Windows.Forms.Label pingresult;
         private System.Windows.Forms.Label latestupdatelabel;
         private System.Windows.Forms.Label latestupdate;
+        private System.Windows.Forms.Label snifferlabel;
+        private System.Windows.Forms.Button sniffstart;
+        private System.Windows.Forms.Label sniffed;
     }
 }
